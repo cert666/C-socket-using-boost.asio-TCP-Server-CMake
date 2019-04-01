@@ -11,6 +11,9 @@ install C++ compiler if needed
 
 compile and run app for sync server
 	./install.sh
+	
+If error is returned when server starts "bind: Address already in use",
+kill any process which uses port 1234 "lsof -ti:1234 | xargs kill -9".	
                                                                   
                                                         
 
