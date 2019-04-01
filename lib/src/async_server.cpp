@@ -2,6 +2,7 @@
 
 #include "async_server.hpp"
 #include <iostream>
+#include <fstream>      // std::ifstream
 #include <boost/asio.hpp>
 #include <boost/bind.hpp>
 #include <boost/enable_shared_from_this.hpp>
@@ -24,6 +25,26 @@ tcp::socket& con_handler::get_socket()
 
 void con_handler::start()
 {
+
+
+
+   // load binary file for fw update
+   std::ifstream file;
+   file.open("../../lib/src/web.html" );
+
+   file.seekg (0, file.end);// set pointer to the end
+   auto bin_file_length = file.tellg(); // get size of file
+   file.seekg (0, file.beg);// set pointer back to the begining
+
+   cout<< "Size of web page is: " << bin_file_length;
+
+   std::stringstream strStream;
+    strStream << file.rdbuf(); //read the file
+
+
+
+ cout << strStream.str();
+
  sock.async_read_some(
      boost::asio::buffer(data, max_length),
      boost::bind(&con_handler::handle_read,
@@ -32,11 +53,13 @@ void con_handler::start()
                  boost::asio::placeholders::bytes_transferred));
 
  sock.async_write_some(
-     boost::asio::buffer(message, max_length),
+     boost::asio::buffer(strStream.str(), max_length),
      boost::bind(&con_handler::handle_write,
                shared_from_this(),
                boost::asio::placeholders::error,
                boost::asio::placeholders::bytes_transferred));
+
+   file.close();
 }
 
 void con_handler::handle_read(const boost::system::error_code& err, size_t bytes_transferred)
