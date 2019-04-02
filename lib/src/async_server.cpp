@@ -36,14 +36,16 @@ void con_handler::start()
    auto bin_file_length = file.tellg(); // get size of file
    file.seekg (0, file.beg);// set pointer back to the begining
 
-   cout<< "Size of web page is: " << bin_file_length;
+   cout<< "Size of web page is: " << bin_file_length << endl;
 
    std::stringstream strStream;
     strStream << file.rdbuf(); //read the file
 
 
+   cout<< "Size of string of the web page is: " << strStream.str().size() <<endl;
 
- cout << strStream.str();
+   // print content of the webpage
+   cout << strStream.str();
 
  sock.async_read_some(
      boost::asio::buffer(data, max_length),
@@ -53,7 +55,7 @@ void con_handler::start()
                  boost::asio::placeholders::bytes_transferred));
 
  sock.async_write_some(
-     boost::asio::buffer(strStream.str(), max_length),
+     boost::asio::buffer(strStream.str(), strStream.str().size()),
      boost::bind(&con_handler::handle_write,
                shared_from_this(),
                boost::asio::placeholders::error,
