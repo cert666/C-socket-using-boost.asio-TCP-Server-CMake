@@ -25,7 +25,10 @@ private:
   tcp::socket sock;
   std::string message;
   enum { max_length = 1024 };
-  char data[max_length];
+  char IncomStr[max_length];
+  static const std::string BasePath;
+  static const std::string RegexFilter;
+
 
 public:
 

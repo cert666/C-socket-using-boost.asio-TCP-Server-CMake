@@ -1,0 +1,110 @@
+HTTP/1.1 200 OK
+Content-Type: text/html;charset=UTF-8
+
+
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+
+      google.charts.load('current', {'packages':['corechart']});
+      google.charts.setOnLoadCallback(drawChart);
+	  
+	  var i=0;
+	  var all = new Array();
+	  const ARRAY_SIZE = 100;
+	 
+
+      function drawChart(m) {
+	  
+		all.push(m);
+	  
+        var data = new google.visualization.DataTable();
+		
+        data.addColumn('number');
+        data.addColumn('number');
+
+		for(j=0;j<i;j++)
+		{
+			data.addRow([j,all[j]]);
+		}
+		
+		if (i < ARRAY_SIZE){
+		
+			i++;
+		
+		}else
+		{
+			all.shift(); 
+		}
+		
+        var options = {
+          title: 'Company Performance',
+          curveType: 'function',
+          legend: { position: 'bottom' }
+        };
+
+        var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
+        chart.draw(data, options);
+		
+		function resizeHandler () {
+        chart.draw(data, options);
+		}
+		if (window.addEventListener) {
+			window.addEventListener('resize', resizeHandler, false);
+		}
+		else if (window.attachEvent) {
+			window.attachEvent('onresize', resizeHandler);
+		}
+
+		
+      }
+	  
+      function sliderFnc() {
+			var x = document.getElementById("myRange").value;
+			//document.getElementById("demo").value = x;
+			drawChart(x*10);
+		}
+		
+    </script>
+	<style>
+		div.relative {
+			position: relative;
+			left: 40%;
+			
+		}
+		
+		div.round1 {
+			position: relative;			
+			border: 2px solid grey;
+			border-radius: 5px;
+			border-width: 5px;
+			min-height:600px;
+			max-width:600px;
+			height: 52%;
+			width: 52%;
+			margin:auto;
+			
+
+		}
+	</style>
+  </head>
+  <body>
+	<div id="border" class="round1">
+		<!-- google chart -->
+		<div id="curve_chart" style="min-height:500px;min-width:600px;height:50%;width: 50%;margin:auto;background:#fff"></div>
+		
+			<!-- slider -->
+		<div class="relative">
+			<h3>Slider Control</h3>
+			<input type="range" id="myRange" onchange="sliderFnc()" value="90">
+		</div>
+	</div>
+     <h2>HTML Links</h2>
+	 <p><a href="web.html">Visit our HTML tutorial</a></p>
+  </body>
+  
+  
+</html>
